@@ -20,36 +20,18 @@ class Command(NoArgsCommand):
         session.set_keyspace("twissandra")
 
         session.execute("""
+            CREATE TABLE querries (
+                type text PRIMARY KEY, 
+                qtd int 
+            )
+            """)
+
+        session.execute("""
             CREATE TABLE statements (
                 id int PRIMARY KEY,
                 json text
             )
             """)
 
-        session.execute("""
-            CREATE TABLE tweets (
-                tweet_id uuid PRIMARY KEY,
-                username text,
-                body text
-            )
-            """)
-
-        session.execute("""
-            CREATE TABLE userline (
-                username text,
-                time timeuuid,
-                tweet_id uuid,
-                PRIMARY KEY (username, time)
-            ) WITH CLUSTERING ORDER BY (time DESC)
-            """)
-
-        session.execute("""
-            CREATE TABLE timeline (
-                username text,
-                time timeuuid,
-                tweet_id uuid,
-                PRIMARY KEY (username, time)
-            ) WITH CLUSTERING ORDER BY (time DESC)
-            """)
 
         print 'All done!'
