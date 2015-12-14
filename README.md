@@ -1,22 +1,7 @@
-# TCC Escola Politecnica USP - 2015
+# Final Job - Escola Politecnica USP Brazil - 2015
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+This is a fork of Twissandra (which has its own description below). We use Twissandra to implement one part of our solution to our Final in Escola Politenica - USP - Brazil. Thanks to Thobbs and everyone involved.
+Cheers Guys!
 
 # Twissandra
 
