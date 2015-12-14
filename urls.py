@@ -1,9 +1,9 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
 
-urlpatterns = patterns('',
-    url('^auth/', include('users.urls')),
-    url('', include('tweets.urls')),
+urlpatterns = patterns(
+    url('^tweets/', include('tweets.urls')),
+    url('^statements/', include('statements.urls')),
 )
 
 if settings.DEBUG:

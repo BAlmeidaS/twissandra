@@ -67,7 +67,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'users.middleware.UserMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
@@ -85,5 +84,5 @@ CACHE_BACKEND = 'locmem:///'
 INSTALLED_APPS = (
     'django.contrib.sessions',
     'tweets',
-    'users',
+    'statements',
 )

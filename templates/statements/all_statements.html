@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Public Timeline - {{ block.super }}{% endblock %}
+
+{% block content %}
+    <h2 class="grid_4 suffix_5">Statements</h2>
+    <ul id="timeline" class="grid_9 alpha">
+        {% for row in rows %}
+            <li>
+                {{row.statement}}
+                <span class="body">{{row.json}}</span>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
