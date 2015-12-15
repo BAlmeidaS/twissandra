@@ -183,12 +183,13 @@ def verb_types(request):
 
     statements = session.execute("""SELECT * FROM statements2""")
 
-    # cria o vetor type_verbs, com todos os verbos do sistema 
-    statements_temp = copy.copy(statements)
-    type_verbs = []
-    for row in statements_temp:
+    type_verbs = dict()
+
+    for row in statements:
         if str(row.verb.display.get('en-US')) not in type_verbs:
-            type_verbs.append(str(row.verb.display.get('en-US')))
+            type_verbs[row.verb.display.get('en-US')] = row.verb.display.get('en-US')
+
+
     #print type_verbs
 
     #html_table_df2 = df2.to_html(index=False)
@@ -214,12 +215,16 @@ def user_types(request):
     statements = session.execute("""SELECT * FROM statements2""")
 
     # cria o vetor type_users, com todos os usuarios do sistema 
-    statements_temp = copy.copy(statements)
-    type_users = []
-    for row in statements_temp:
+
+
+    type_users = dict()
+
+    for row in statements:
         if str(row.actor.name) not in type_users:
-            type_users.append(str(row.actor.name))
-    #print type_users
+            type_users[str(row.actor.name)] = str(row.actor.name)
+
+
+    print type_users
 
     #df2.columns = ['user', 'logins']
 

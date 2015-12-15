@@ -1,0 +1,18 @@
+select * from statements2 where actor = {'mbox': 'mailto:user@example.com','name': 'Project Tin Can API','objectType': 'Agent'} limit 1;
+
+
+
+
+
+
+
+delete from twissandra.statements2 where idlrs = 1;
+
+
+
+
+
+
+
+select * from twissandra.statements2 where actor = {mbox: 'mailto:user@example.com',name: 'Project Tin Can API',objectType: 'Agent'} ;
+select verb from twissandra.statements2 where verb = {id: 'http://moodletcc/lrs/verbss/loggedout', display: {'en-US': 'loggedout'}};
