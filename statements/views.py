@@ -173,10 +173,8 @@ def user_course_relation_with_view(request):
                     else:
                         views_user_course[row.actor.name][curso] += 1
             except:
-                print "error in viewed"
-
-
-
+                print "nao era view de curso"
+   
     #df2.columns = ['user', 'logins']
 
     context = {
@@ -228,11 +226,16 @@ def user_types(request):
     statements = session.execute("""SELECT * FROM statements2""")
 
     # cria o vetor type_users, com todos os usuarios do sistema 
+
+
     type_users = dict()
+
     for row in statements:
         if str(row.actor.name) not in type_users:
             type_users[str(row.actor.name)] = str(row.actor.name)
 
+
+    print type_users
 
     #df2.columns = ['user', 'logins']
 
