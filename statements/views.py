@@ -141,6 +141,7 @@ def report_statements(request):
     session.set_keyspace("twissandra")
 
 
+    #logins per user
     statements = session.execute("""SELECT * FROM statements2""")
 
     logins_per_user = dict()
@@ -152,15 +153,22 @@ def report_statements(request):
         else:
             logins_per_user[str(row.actor.name)] = 1
 
-    for key in logins_per_user:
-        print("{} = {}".format(key, logins_per_user[key]))
-
     df2 = pd.DataFrame(logins_per_user.items())
 
-    print(df2)
 
 
-    context = 'fool'
+    html_table_df2 = df2.to_html(index=False)
+
+    #usuario por verbo mais uilizado
+
+    df2.columns = ['user', 'logins']
+
+
+    context = {
+        'html_table_df2' : html_table_df2,
+        'columns' : df2.columns,
+        'lines' : df2.values,
+        }
 
 
     return render_to_response(
