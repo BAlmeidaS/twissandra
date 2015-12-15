@@ -137,13 +137,19 @@ def show_statements2(request):
     return render_to_response(
         'statements/all_statements.html', context, context_instance=RequestContext(request))
 
-def report_statements(request):
+def report(request):
+
+    return render_to_response(
+        'statements/reports.html', context_instance=RequestContext(request))
+
+def logins_by_user(request):
          
     cluster = Cluster(['127.0.0.1'])
     session = cluster.connect()
     session.set_keyspace("twissandra")
 
 
+    #logins per user
     statements = session.execute("""SELECT * FROM statements2""")
 
     logins_per_user = dict()
@@ -215,6 +221,7 @@ def report_statements(request):
     
     df2.columns = ['user', 'logins']
 
+
     context = {
         'html_table_df2' : html_table_df2,
         'columns' : df2.columns,
@@ -223,4 +230,4 @@ def report_statements(request):
 
 
     return render_to_response(
-        'statements/all_statements.html', context, context_instance=RequestContext(request))
+        'statements/logins_by_user.html', context, context_instance=RequestContext(request))

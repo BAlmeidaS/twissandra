@@ -3,7 +3,7 @@ from django.conf import settings
 
 urlpatterns = patterns(
     url('^tweets/', include('tweets.urls')),
-    url('^statements/', include('statements.urls')),
+    url('^statements/', include('statements.urls', namespace='statements')),
 )
 
 if settings.DEBUG:
