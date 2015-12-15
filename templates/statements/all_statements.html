@@ -27,23 +27,30 @@
 </style>
 
 <header id="header">
-	<h1>Relatórios</h1>
+	<h1>Logins por usuário</h1>
 </header>
-<body>
-    <tr >
-    	<a href="{% url 'statements:logins_by_user' %}"><h3>Logins por usuário<h3></a>
-    	<a href="{% url 'statements:user_course_relation' %}"><h3>Relação entre usuários e cursos através de views<h3></a>
-    	<a href="{% url 'statements:verb_types' %}"><h3>Tipos de verbo<h3></a>
-    	<a href="{% url 'statements:user_types' %}"><h3>Tipos de usuário<h3></a>
-    	<a href="{% url 'statements:login_logouts' %}"><h3>Logins e logouts por usuário<h3></a>
-    	<a href="{% url 'statements:verbs_by_user' %}"><h3>Verbos por usuário<h3></a>
-    </tr>
-</body>
-<backlink>
-	<a href="{% url 'statements:show_statements2' %}" class="btn btn-info" role="button">Atualizar banco de dados</a>
-</backlink>
 <div>
 	<br>
+</div>
+<div>
+	<br>
+</div>
+<div>
+	<br>
+</div>
+<div>
+	<br>
+</div>
+
+<body>
+	<h2 align="center"> Banco de dados Atualizado<h2>
+<div>
+	<br>
+</div>
+<div align="center">
+	<backlink>
+		<a href="{% url 'statements:report' %}" class="btn btn-info" role="button">Continuar</a>
+	</backlink>
 </div>
 <footer align="center" id="footer">
 	<h5>Projeto de formatura PensandoAI- Poli 2015</h5>

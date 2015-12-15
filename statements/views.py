@@ -186,7 +186,8 @@ def user_course_relation_with_view(request):
         'statements/user_course_relation_with_view.html', context, context_instance=RequestContext(request))
 
 
-def verbs_per_user(request):
+
+def verbs_by_user(request):
 
     cluster = Cluster(['127.0.0.1'])
     session = cluster.connect()
@@ -207,18 +208,20 @@ def verbs_per_user(request):
                 verbs_per_user[row.actor.name][row.verb.display.get('en-US') ] += 1
 
 
-    print verbs_per_user
+    df2 = pd.DataFrame(verbs_per_user.items())
+    
+    df2.columns = ['user', 'verb']
 
     context = {
-        'column' : 'column',
-        'lines' : 'type_verbs.keys',
+        'columns' : df2.columns,
+        'lines' : df2.values,
         }
 
 
     return render_to_response(
         'statements/verb_types.html', context, context_instance=RequestContext(request))   
 
-def verb_types2(request):
+def verb_types(request):
 
     cluster = Cluster(['127.0.0.1'])
     session = cluster.connect()
