@@ -10,9 +10,9 @@
 <style>
 #header {
     background-color:black;
-    color:white;
-    text-align:center;
     padding:5px;
+	color:white;
+    text-align:center;
 }
 
 </style>
@@ -58,6 +58,12 @@
 	      </tbody>
 	</table>
 </body>
-<footer>
-	<a href="{% url 'statements:report' %}"><h3>Voltar<h3></a>
+<backlink>
+	<a href="{% url 'statements:report' %}" class="btn btn-default" role="button">Voltar</a>
+</backlink>
+<div>
+	<br>
+</div>
+<footer align="center" id="footer">
+	<h5>Projeto de formatura PensandoAI- Poli 2015</h5>
 </footer>
