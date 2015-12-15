@@ -219,7 +219,7 @@ def verbs_by_user(request):
 
 
     return render_to_response(
-        'statements/verb_types.html', context, context_instance=RequestContext(request))   
+        'statements/verb_per_user.html', context, context_instance=RequestContext(request))   
 
 def verb_types(request):
 
@@ -345,14 +345,18 @@ def last_ten_statements(request):
     last_ten_statements = dict()
 
     for row in statements:
-        last_ten_statements[str(row.object.definition.description.get('en-US'))] = str(row.object.definition.description.get('en-US'))
+        last_ten_statements[str(row.idlrs)] = str(row.object.definition.description.get('en-US'))
 
 
-    column = 'last ten statements'
+    df2 = pd.DataFrame(last_ten_statements.items())
+
+    html_table_df2 = df2.to_html(index=False)
+    
+    df2.columns = ['id', 'statement']
 
     context = {
-        'column' : column,
-        'lines' : last_ten_statements.keys,
+        'columns' : df2.columns,
+        'lines' : df2.values,
         }
 
 

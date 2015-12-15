@@ -16,7 +16,6 @@
 }
 
 #footer{
-    position:fixed;
     height:50px;
     bottom:0px;
     left:0px;
@@ -34,7 +33,9 @@
 	    {% block table.thead %}
 	        <thead>
 	        <tr>
-	            <th > {{ column }}</th>
+	            {% for column in columns %}
+	                <th > {{ column }}</th>
+	            {% endfor %}
 	        </tr>
 	        </thead>
 	    {% endblock table.thead %}
@@ -43,7 +44,10 @@
 	        {% for line in lines %}
 	            {% block table.tbody.row %}
 	                <tr >
-	                    <td >{{ line }} </td>
+	                	{% for i in line %}
+	                    <td >{{ i }} </td>
+
+	                	{% endfor %}
 	                </tr>
 	            {% endblock table.tbody.row %}
 	        {% endfor %}
