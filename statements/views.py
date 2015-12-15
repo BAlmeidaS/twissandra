@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from cassandra.cluster import Cluster
 from django.core.management.base import NoArgsCommand
 from  HTMLParser import HTMLParser
+import copy
 import urllib
 import urllib2
 import json
@@ -13,6 +14,7 @@ import re
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import datetime
 
 def show_statements(request):
          
@@ -77,6 +79,7 @@ def show_statements2(request):
     else:
         i=i[0].qtd
 
+    print i
 
     while True:
         f = urllib2.urlopen('http://ec2-54-213-235-203.us-west-2.compute.amazonaws.com/getstat/'+str(i))
@@ -141,7 +144,6 @@ def report_statements(request):
     session.set_keyspace("twissandra")
 
 
-    #logins per user
     statements = session.execute("""SELECT * FROM statements2""")
 
     logins_per_user = dict()
@@ -151,13 +153,61 @@ def report_statements(request):
             logins_per_user[str(row.actor.name)] += 1
 
         else:
-            logins_per_user[str(row.actor.name)] = 1
-
-    df2 = pd.DataFrame(logins_per_user.items())
-
+            actions_per_user[str(row.actor.name)] = 1
+    df_actions = pd.DataFrame(actions_per_user.items())
 
 
-    html_table_df2 = df2.to_html(index=False)
+    statements_temp = statements
+    for k in statements_temp:
+        if k.verb.display.get('en-US') == "viewed":
+            try:
+                temp = str(k.object.definition.description.get('en-US'))[-10:-1]
+                print k.actor.name + " " + k.verb.display.get('en-US') + " " + temp.split("'")[1]
+            except:
+                print "nao era view de curso"
+
+    # cria o vetor type_verbs, com todos os verbos do sistema 
+    statements_temp = copy.copy(statements)
+    type_verbs = []
+    for row in statements_temp:
+        if str(row.verb.display.get('en-US')) not in type_verbs:
+            type_verbs.append(str(row.verb.display.get('en-US')))
+    #print type_verbs
+
+
+    # cria o vetor type_users, com todos os usuarios do sistema 
+    statements_temp = copy.copy(statements)
+    type_users = []
+    for row in statements_temp:
+        if str(row.actor.name) not in type_users:
+            type_users.append(str(row.actor.name))
+    #print type_users
+
+
+    #cria os dicts loogedin_users e loogedout_users
+    #sao dicionarios que cada chave sao os usuarios e seus valores sao os vetores com todos as datas de login e logout (respectivamente)
+    statements_temp = copy.copy(statements)
+    loogedin_users = dict()
+    loogedout_users = dict()
+    for row in statements_temp:
+        date = datetime.datetime.strptime(str(row.timestamp)[0:-13],"%Y-%m-%dT%H:%M:%S")
+        if str(row.verb.display.get('en-US')) == "loggedin":
+            if str(row.actor.name) in loogedin_users:
+                #if datetetime.datetime(looged_users[str(row.actor.name)][-1][1][0:-13],"%Y-%m-%dT%H:%M:%S") > datetime.datetime(str(row.timestamp)[0:-13],"%Y-%m-%dT%H:%M:%S")
+                loogedin_users[str(row.actor.name)].append(date)
+            else:
+                loogedin_users[str(row.actor.name)] = []
+                loogedin_users[str(row.actor.name)].append(date)
+        else:
+            if str(row.verb.display.get('en-US')) == "loggedout":
+                if str(row.actor.name) in loogedout_users:
+                    loogedout_users[str(row.actor.name)].append(date)
+                else:
+                    loogedout_users[str(row.actor.name)] = []
+                    loogedout_users[str(row.actor.name)].append(date)
+
+
+     html_table_df2 = df2.to_html(index=False)
 
     #usuario por verbo mais uilizado
 
