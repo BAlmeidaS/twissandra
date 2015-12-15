@@ -10,6 +10,9 @@ import urllib2
 import json
 import ast
 import re
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 
 def show_statements(request):
          
@@ -138,13 +141,24 @@ def report_statements(request):
     session.set_keyspace("twissandra")
 
 
-    statements = session.execute("""SELECT json FROM statements""")
+    statements = session.execute("""SELECT * FROM statements2""")
+
+    logins_per_user = dict()
 
     for row in statements:
-        json_derulo = json.loads(row[0])
+        if str(row.actor.name) in logins_per_user:
+            logins_per_user[str(row.actor.name)] += 1
 
-        print type(json_derulo)
-        print json_derulo['verb']
+        else:
+            logins_per_user[str(row.actor.name)] = 1
+
+    for key in logins_per_user:
+        print("{} = {}".format(key, logins_per_user[key]))
+
+    df2 = pd.DataFrame(logins_per_user.items())
+
+    print(df2)
+
 
     context = 'fool'
 

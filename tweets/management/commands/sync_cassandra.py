@@ -9,7 +9,7 @@ class Command(NoArgsCommand):
         session = cluster.connect()
 
 
-        #session.execute("DROP KEYSPACE twissandra")
+        session.execute("DROP KEYSPACE twissandra")
 
         session.execute("""
             CREATE KEYSPACE twissandra
