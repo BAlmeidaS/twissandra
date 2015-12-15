@@ -258,31 +258,36 @@ def login_logouts(request):
     loogedin_users = dict()
     loogedout_users = dict()
     for row in statements_temp:
-        date = datetime.datetime.strptime(str(row.timestamp)[0:-13],"%Y-%m-%dT%H:%M:%S")
         if str(row.verb.display.get('en-US')) == "loggedin":
             if str(row.actor.name) in loogedin_users:
                 #if datetetime.datetime(looged_users[str(row.actor.name)][-1][1][0:-13],"%Y-%m-%dT%H:%M:%S") > datetime.datetime(str(row.timestamp)[0:-13],"%Y-%m-%dT%H:%M:%S")
-                loogedin_users[str(row.actor.name)].append(date)
+                loogedin_users[str(row.actor.name)].append(str(row.timestamp)[0:-13])
             else:
                 loogedin_users[str(row.actor.name)] = []
-                loogedin_users[str(row.actor.name)].append(date)
+                loogedin_users[str(row.actor.name)].append(str(row.timestamp)[0:-13])
         else:
             if str(row.verb.display.get('en-US')) == "loggedout":
                 if str(row.actor.name) in loogedout_users:
-                    loogedout_users[str(row.actor.name)].append(date)
+                    loogedout_users[str(row.actor.name)].append(str(row.timestamp)[0:-13])
                 else:
                     loogedout_users[str(row.actor.name)] = []
-                    loogedout_users[str(row.actor.name)].append(date)
+                    loogedout_users[str(row.actor.name)].append(str(row.timestamp)[0:-13])
 
 
     #html_table_df2 = df2.to_html(index=False)
 
+    df2 = pd.DataFrame(loogedin_users.items())
+    df3 = pd.DataFrame(loogedout_users.items())
 
-    #df2.columns = ['user', 'logins']
+    columns_login = ['user', 'logins']
+    columns_logout = ['user', 'logouts']
 
 
     context = {
-        'html_table_df2' : 'html_table_df2',
+        'columns_login' : columns_login,
+        'lines_login' : df2.values,
+        'columns_logout' : columns_logout,
+        'lines_logout' : df3.values,
         }
 
 
