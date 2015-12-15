@@ -185,6 +185,40 @@ def user_course_relation_with_view(request):
     return render_to_response(
         'statements/user_course_relation_with_view.html', context, context_instance=RequestContext(request))
 
+
+
+def verbs_per_user(request):
+
+    cluster = Cluster(['127.0.0.1'])
+    session = cluster.connect()
+    session.set_keyspace("twissandra")
+
+    statements = session.execute("""SELECT * FROM statements2""")
+
+    verbs_per_user = dict()
+
+    for row in statements:
+        if str(row.actor.name) not in verbs_per_user:
+            verbs_per_user[str(row.actor.name)] = dict()
+            verbs_per_user[row.actor.name][row.verb.display.get('en-US')] = 1
+        else:
+            if row.verb.display.get('en-US') not in verbs_per_user[row.actor.name]:                
+                verbs_per_user[row.actor.name][row.verb.display.get('en-US') ] = 1
+            else:
+                verbs_per_user[row.actor.name][row.verb.display.get('en-US') ] += 1
+
+
+    print verbs_per_user
+
+    context = {
+        'column' : 'column',
+        'lines' : 'type_verbs.keys',
+        }
+
+
+    return render_to_response(
+        'statements/verb_types.html', context, context_instance=RequestContext(request))   
+
 def verb_types(request):
 
     cluster = Cluster(['127.0.0.1'])
