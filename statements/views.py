@@ -186,7 +186,6 @@ def user_course_relation_with_view(request):
         'statements/user_course_relation_with_view.html', context, context_instance=RequestContext(request))
 
 
-
 def verbs_per_user(request):
 
     cluster = Cluster(['127.0.0.1'])
@@ -219,7 +218,7 @@ def verbs_per_user(request):
     return render_to_response(
         'statements/verb_types.html', context, context_instance=RequestContext(request))   
 
-def verb_types(request):
+def verb_types2(request):
 
     cluster = Cluster(['127.0.0.1'])
     session = cluster.connect()
@@ -322,3 +321,37 @@ def login_logouts(request):
 
     return render_to_response(
         'statements/login_logout.html', context, context_instance=RequestContext(request))
+
+def last_ten_statements(request):
+    cluster = Cluster(['127.0.0.1'])
+    session = cluster.connect()
+    session.set_keyspace("twissandra")
+
+    
+    i = session.execute("""SELECT qtd FROM querries where type = 'states2' """)
+    i = i[0].qtd
+    temp = str(int(i-1))
+    for k in range(9):
+        temp = temp + ", " + str(i - (k+2))
+
+
+    statements = session.execute("SELECT * FROM statements2 where idlrs in (" + temp + ")")
+
+    # cria o vetor type_users, com todos os usuarios do sistema 
+
+    last_ten_statements = dict()
+
+    for row in statements:
+        last_ten_statements[str(row.object.definition.description.get('en-US'))] = str(row.object.definition.description.get('en-US'))
+
+
+    print last_ten_statements
+
+    context = {
+        'column' : 'column',
+        'lines' : 'type_users.keys',
+        }
+
+
+    return render_to_response(
+        'statements/user_types.html', context, context_instance=RequestContext(request))
