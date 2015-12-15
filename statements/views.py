@@ -155,15 +155,28 @@ def user_course_relation_with_view(request):
 
     statements = session.execute("""SELECT * FROM statements2""")
 
-    statements_temp = statements
-    for k in statements_temp:
-        if k.verb.display.get('en-US') == "viewed":
+
+
+    #ciews_user_course é um dicionario com as keys = usuarios e os values = dicts_course
+    #dicts_course é um dicionario de key = curso e values = qtd que usuario viu o curso
+    views_user_course = dict()
+    for row in statements:
+        if row.verb.display.get('en-US') == "viewed":
             try:
-                temp = str(k.object.definition.description.get('en-US'))[-10:-1]
-                print k.actor.name + " " + k.verb.display.get('en-US') + " " + temp.split("'")[1]
+                curso = str(int(str(row.object.definition.description.get('en-US'))[-10:-1].split("'")[1]))
+                if str(row.actor.name) not in views_user_course:                
+                    views_user_course[row.actor.name] = dict()
+                    views_user_course[row.actor.name][curso] = 1
+                else:
+                    if curso not in views_user_course[row.actor.name]:                
+                        views_user_course[row.actor.name][curso] = 1
+                    else:
+                        views_user_course[row.actor.name][curso] += 1
             except:
-                print "nao era view de curso"
-   
+                print "error in viewed"
+
+
+
     #df2.columns = ['user', 'logins']
 
     context = {
@@ -215,16 +228,11 @@ def user_types(request):
     statements = session.execute("""SELECT * FROM statements2""")
 
     # cria o vetor type_users, com todos os usuarios do sistema 
-
-
     type_users = dict()
-
     for row in statements:
         if str(row.actor.name) not in type_users:
             type_users[str(row.actor.name)] = str(row.actor.name)
 
-
-    print type_users
 
     #df2.columns = ['user', 'logins']
 
