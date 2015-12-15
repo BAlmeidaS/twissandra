@@ -101,35 +101,6 @@ def show_statements2(request):
 
     rows = session.execute("""SELECT * FROM statements2""")
 
-    print "resultados do json"
-    print rows[0].verb.id
-
-    print rows[0].verb.display.get('en-US')
-
-    print rows[0].version
-
-    print rows[0].timestamp
-
-    print rows[0].object.definition.name.get('en-US')
-    print rows[0].object.definition.description.get('en-US')
-    print rows[0].object.id
-    print rows[0].object.objecttype
-
-
-    print rows[0].actor.mbox
-    print rows[0].actor.name
-    print rows[0].actor.objecttype
-
-    print rows[0].stored
-
-    print rows[0].authority.mbox
-    print rows[0].authority.name
-    print rows[0].authority.objecttype
-
-    print rows[0].id
-
-    print rows[0].idlrs
-
     context = {
         'rows': rows,
         }
@@ -148,8 +119,6 @@ def logins_by_user(request):
     session = cluster.connect()
     session.set_keyspace("twissandra")
 
-
-    #logins per user
     statements = session.execute("""SELECT * FROM statements2""")
 
     logins_per_user = dict()
@@ -163,6 +132,29 @@ def logins_by_user(request):
     df_actions = pd.DataFrame(logins_per_user.items())
     df2 = pd.DataFrame(logins_per_user.items())
 
+    html_table_df2 = df2.to_html(index=False)
+    
+    df2.columns = ['user', 'logins']
+
+    context = {
+        'html_table_df2' : html_table_df2,
+        'columns' : df2.columns,
+        'lines' : df2.values,
+        }
+
+
+    return render_to_response(
+        'statements/logins_by_user.html', context, context_instance=RequestContext(request))
+
+
+def user_course_relation_with_view(request):
+         
+    cluster = Cluster(['127.0.0.1'])
+    session = cluster.connect()
+    session.set_keyspace("twissandra")
+
+    statements = session.execute("""SELECT * FROM statements2""")
+
     statements_temp = statements
     for k in statements_temp:
         if k.verb.display.get('en-US') == "viewed":
@@ -171,6 +163,25 @@ def logins_by_user(request):
                 print k.actor.name + " " + k.verb.display.get('en-US') + " " + temp.split("'")[1]
             except:
                 print "nao era view de curso"
+   
+    #df2.columns = ['user', 'logins']
+
+    context = {
+        'columns' : 'b',
+        'lines' : 'a',
+        }
+
+
+    return render_to_response(
+        'statements/user_course_relation_with_view.html', context, context_instance=RequestContext(request))
+
+def verb_types(request):
+
+    cluster = Cluster(['127.0.0.1'])
+    session = cluster.connect()
+    session.set_keyspace("twissandra")
+
+    statements = session.execute("""SELECT * FROM statements2""")
 
     # cria o vetor type_verbs, com todos os verbos do sistema 
     statements_temp = copy.copy(statements)
@@ -180,6 +191,27 @@ def logins_by_user(request):
             type_verbs.append(str(row.verb.display.get('en-US')))
     #print type_verbs
 
+    #html_table_df2 = df2.to_html(index=False)
+
+    
+    #df2.columns = ['user', 'logins']
+
+
+    context = {
+        'html_table_df2' : 'html_table_df2',
+        }
+
+
+    return render_to_response(
+        'statements/verb_types.html', context, context_instance=RequestContext(request))
+
+
+def user_types(request):
+    cluster = Cluster(['127.0.0.1'])
+    session = cluster.connect()
+    session.set_keyspace("twissandra")
+
+    statements = session.execute("""SELECT * FROM statements2""")
 
     # cria o vetor type_users, com todos os usuarios do sistema 
     statements_temp = copy.copy(statements)
@@ -189,7 +221,24 @@ def logins_by_user(request):
             type_users.append(str(row.actor.name))
     #print type_users
 
+    #df2.columns = ['user', 'logins']
 
+
+    context = {
+        'html_table_df2' : 'html_table_df2',
+        }
+
+
+    return render_to_response(
+        'statements/user_types.html', context, context_instance=RequestContext(request))
+
+
+def login_logouts(request):
+    cluster = Cluster(['127.0.0.1'])
+    session = cluster.connect()
+    session.set_keyspace("twissandra")
+
+    statements = session.execute("""SELECT * FROM statements2""")
     #cria os dicts loogedin_users e loogedout_users
     #sao dicionarios que cada chave sao os usuarios e seus valores sao os vetores com todos as datas de login e logout (respectivamente)
     statements_temp = copy.copy(statements)
@@ -213,21 +262,16 @@ def logins_by_user(request):
                     loogedout_users[str(row.actor.name)].append(date)
 
 
-    html_table_df2 = df2.to_html(index=False)
+    #html_table_df2 = df2.to_html(index=False)
 
-    #usuario por verbo mais uilizado
 
-    
-    
-    df2.columns = ['user', 'logins']
+    #df2.columns = ['user', 'logins']
 
 
     context = {
-        'html_table_df2' : html_table_df2,
-        'columns' : df2.columns,
-        'lines' : df2.values,
+        'html_table_df2' : 'html_table_df2',
         }
 
 
     return render_to_response(
-        'statements/logins_by_user.html', context, context_instance=RequestContext(request))
+        'statements/login_logout.html', context, context_instance=RequestContext(request))
