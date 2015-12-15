@@ -153,9 +153,9 @@ def report_statements(request):
             logins_per_user[str(row.actor.name)] += 1
 
         else:
-            actions_per_user[str(row.actor.name)] = 1
-    df_actions = pd.DataFrame(actions_per_user.items())
-
+            logins_per_user[str(row.actor.name)] = 1
+    df_actions = pd.DataFrame(logins_per_user.items())
+    df2 = pd.DataFrame(logins_per_user.items())
 
     statements_temp = statements
     for k in statements_temp:
@@ -207,12 +207,13 @@ def report_statements(request):
                     loogedout_users[str(row.actor.name)].append(date)
 
 
-     html_table_df2 = df2.to_html(index=False)
+    html_table_df2 = df2.to_html(index=False)
 
     #usuario por verbo mais uilizado
 
+    
+    
     df2.columns = ['user', 'logins']
-
 
     context = {
         'html_table_df2' : html_table_df2,
