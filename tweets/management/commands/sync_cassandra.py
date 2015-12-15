@@ -33,5 +33,57 @@ class Command(NoArgsCommand):
             )
             """)
 
+        session.execute("""
+            CREATE TYPE Verb (
+                id text,
+                display map<text, text>
+            )
+            """)
+
+        session.execute("""
+            CREATE TYPE Definition (
+                name map<text, text>,
+                description map<text, text>
+            )
+            """)  
+        
+        session.execute("""
+            CREATE TYPE Object (
+                definition frozen<Definition>,
+                id text,
+                objectType text
+            )
+            """)  
+        session.execute("""
+            CREATE TYPE Actor (
+                mbox text,
+                name text,
+                objectType text
+            )
+            """)      
+        session.execute("""
+            CREATE TYPE Authority (
+                mbox text,
+                name text,
+                objectType text
+            )
+            """)      
+        
+
+        session.execute("""
+            CREATE TABLE statements2 (
+                idlrs int PRIMARY KEY,
+                verb frozen<Verb>,
+                version text,
+                timestamp text,
+                object frozen<Object>,
+                actor frozen<Actor>,
+                stored text,
+                authority frozen<Authority>,
+                id text
+            )
+            """)
+            
+
 
         print 'All done!'
