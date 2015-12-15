@@ -348,13 +348,13 @@ def last_ten_statements(request):
         last_ten_statements[str(row.object.definition.description.get('en-US'))] = str(row.object.definition.description.get('en-US'))
 
 
-    print last_ten_statements
+    column = 'last ten statements'
 
     context = {
-        'column' : 'column',
-        'lines' : 'type_users.keys',
+        'column' : column,
+        'lines' : last_ten_statements.keys,
         }
 
 
     return render_to_response(
-        'statements/user_types.html', context, context_instance=RequestContext(request))
+        'statements/last_ten_statements.html', context, context_instance=RequestContext(request))
