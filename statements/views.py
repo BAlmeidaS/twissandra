@@ -137,7 +137,6 @@ def logins_by_user(request):
     df2.columns = ['user', 'logins']
 
     context = {
-        'html_table_df2' : html_table_df2,
         'columns' : df2.columns,
         'lines' : df2.values,
         }
@@ -155,10 +154,8 @@ def user_course_relation_with_view(request):
 
     statements = session.execute("""SELECT * FROM statements2""")
 
-
-
-    #ciews_user_course é um dicionario com as keys = usuarios e os values = dicts_course
-    #dicts_course é um dicionario de key = curso e values = qtd que usuario viu o curso
+    #views_user_course eh um dicionario com as keys = usuarios e os values = dicts_course
+    #dicts_course eh um dicionario de key = curso e values = qtd que usuario viu o curso
     views_user_course = dict()
     for row in statements:
         if row.verb.display.get('en-US') == "viewed":
@@ -175,11 +172,13 @@ def user_course_relation_with_view(request):
             except:
                 print "nao era view de curso"
    
-    #df2.columns = ['user', 'logins']
+    df2 = pd.DataFrame(views_user_course.items())
+    
+    df2.columns = ['user', 'course']
 
     context = {
-        'columns' : 'b',
-        'lines' : 'a',
+        'columns' : df2.columns,
+        'lines' : df2.values,
         }
 
 
@@ -201,16 +200,11 @@ def verb_types(request):
             type_verbs[row.verb.display.get('en-US')] = row.verb.display.get('en-US')
 
 
-    #print type_verbs
-
-    #html_table_df2 = df2.to_html(index=False)
-
-    
-    #df2.columns = ['user', 'logins']
-
+    column = 'verb'
 
     context = {
-        'html_table_df2' : 'html_table_df2',
+        'column' : column,
+        'lines' : type_verbs.keys,
         }
 
 
@@ -235,13 +229,11 @@ def user_types(request):
             type_users[str(row.actor.name)] = str(row.actor.name)
 
 
-    print type_users
-
-    #df2.columns = ['user', 'logins']
-
+    column = 'user'
 
     context = {
-        'html_table_df2' : 'html_table_df2',
+        'column' : column,
+        'lines' : type_users.keys,
         }
 
 
