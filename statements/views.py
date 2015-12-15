@@ -18,11 +18,11 @@ def show_statements(request):
     session.set_keyspace("twissandra")
 
 
-    i=session.execute("""SELECT qtd FROM querries where type = 'states' """)
+    i = session.execute("""SELECT qtd FROM querries where type = 'states' """)
     if not i:
-        i=1
+        i = 1
     else:
-        i=i[0].qtd
+        i = i[0].qtd
 
     print i
     while True:
@@ -38,7 +38,7 @@ def show_statements(request):
         prepared = session.prepare('INSERT INTO statements JSON ?')
         obj = {'id':i, 'json':stat_json}
         session.execute(prepared, [json.dumps(obj)])
-        i=i+1
+        i = i + 1
 
     prepared = session.prepare('INSERT INTO querries JSON ?')
     obj = {'type':'states', 'qtd':i}
@@ -127,6 +127,27 @@ def show_statements2(request):
     context = {
         'rows': rows,
         }
+
+    return render_to_response(
+        'statements/all_statements.html', context, context_instance=RequestContext(request))
+
+def report_statements(request):
+         
+    cluster = Cluster(['127.0.0.1'])
+    session = cluster.connect()
+    session.set_keyspace("twissandra")
+
+
+    statements = session.execute("""SELECT json FROM statements""")
+
+    for row in statements:
+        json_derulo = json.loads(row[0])
+
+        print type(json_derulo)
+        print json_derulo['verb']
+
+    context = 'fool'
+
 
     return render_to_response(
         'statements/all_statements.html', context, context_instance=RequestContext(request))
