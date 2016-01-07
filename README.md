@@ -3,6 +3,10 @@
 This is a fork of Twissandra (which has its own description below). We use Twissandra to implement one part of our solution to our Final in Escola Politenica - USP - Brazil. Thanks to Thobbs and everyone involved.
 Cheers Guys!
 
+---
+
+> Official Description of Twissandra
+
 # Twissandra
 
 Twissandra is an example project, created to learn and demonstrate how to use
